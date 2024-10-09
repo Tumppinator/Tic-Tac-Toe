@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 
 using namespace std;
 
@@ -13,6 +14,8 @@ void displayBoard(char pawns[3][3]);
 bool gameOver = false;
 bool playerWon = false;
 bool AIWon = false;
+bool draw = true;
+int totalTurns = 0;
 char playerPawn = 'p';
 char AIPawn = 'a';
 bool playerTurn = false;
@@ -60,21 +63,41 @@ int main()
 	
 	while (!gameOver)
 	{
-		handlePlayerTurn(pawns);
-		handleAITurn(pawns);
+
+
+		if (playerTurn)
+		{
+			handlePlayerTurn(pawns);
+		}
+		else 
+		{
+			handleAITurn(pawns);
+		}
 
 		// Display game board
 		displayBoard(pawns);
-		
-		// Decide if game is over and who won
+
+		// Decide if game is over, check if it's a draw or decide who won
 		calculateWinPatterns(pawns);
+
+		// Toggle the turn
+		playerTurn = !playerTurn;
 	}
+
 	return 0;
 }
 
 void displayBoard(char pawns[3][3])
 {
 
+	if (playerTurn)
+	{
+		cout << "Player:";
+	}
+	else if(!playerTurn)
+	{
+		cout << "AI:";
+	}
 	cout << "\n " << pawns[0][0] << " " << "|" << " " << pawns[0][1] << " " << "|" << " " << pawns[0][2] << "\n";
 	cout << "---|---|---\n";
 	cout << " " << pawns[1][0] << " " << "|" << " " << pawns[1][1] << " " << "|" << " " << pawns[1][2] << "\n";
@@ -129,10 +152,12 @@ void calculateWinPatterns(char pawns[3][3])
 			if (pawns[0][i] == playerPawn)
 			{
 				playerWon = true;
+				draw = false;
 			}
 			else if (pawns[0][i] == AIPawn)
 			{
 				AIWon = true;
+				draw = false;
 			}
 			gameOver = true;
 		}
@@ -146,10 +171,12 @@ void calculateWinPatterns(char pawns[3][3])
 			if (pawns[0][i] == playerPawn)
 			{
 				playerWon = true;
+				draw = false;
 			}
 			else if (pawns[0][i] == AIPawn)
 			{
 				AIWon = true;
+				draw = false;
 			}
 			gameOver = true;
 		}
@@ -161,10 +188,12 @@ void calculateWinPatterns(char pawns[3][3])
 		if (pawns[0][0] == playerPawn)
 		{
 			playerWon = true;
+			draw = false;
 		}
 		else if (pawns[0][0] == AIPawn)
 		{
 			AIWon = true;
+			draw = false;
 		}
 		gameOver = true;
 	}
@@ -173,10 +202,12 @@ void calculateWinPatterns(char pawns[3][3])
 		if (pawns[0][2] == playerPawn)
 		{
 			playerWon = true;
+			draw = false;
 		}
 		else if (pawns[0][2] == AIPawn)
 		{
 			AIWon = true;
+			draw = false;
 		}
 		gameOver = true;
 	}
@@ -186,10 +217,12 @@ void calculateWinPatterns(char pawns[3][3])
 		if (pawns[0][0] == playerPawn)
 		{
 			playerWon = true;
+			draw = false;
 		}
 		else if (pawns[0][0] == AIPawn)
 		{
 			AIWon = true;
+			draw = false;
 		}
 		gameOver = true;
 	}
@@ -198,15 +231,21 @@ void calculateWinPatterns(char pawns[3][3])
 		if (pawns[0][2] == playerPawn)
 		{
 			playerWon = true;
+			draw = false;
 		}
 		else if (pawns[0][2] == AIPawn)
 		{
 			AIWon = true;
+			draw = false;
 		}
 		gameOver = true;
 	}
 	////////////////////////////////////////////////////////////////////////
-
+	if (totalTurns == 9 && !playerWon && !AIWon)
+	{
+		cout << "The game is a draw!\n";
+		gameOver = true;
+	}
 	if (playerWon)
 	{
 		cout << "You won the game! Congratulations!\n";
@@ -219,255 +258,159 @@ void calculateWinPatterns(char pawns[3][3])
 
 void handleAITurn(char pawns[3][3])
 {
-	if (!playerTurn)
+	if (!gameOver)
 	{
-		// Check for horizontal two in a row condition for AI pawn
+		totalTurns++;
+		// Try to win or block player from winning
+		// Check for horizontal two-in-a-row condition for AI or Player
 		for (int i = 0; i < 3; i++)
 		{
-			if (pawns[i][0] == AIPawn && pawns[i][1] == AIPawn && pawns[i][2] != playerPawn && !playerTurn)
+			if (pawns[i][0] == AIPawn && pawns[i][1] == AIPawn && pawns[i][2] != playerPawn && pawns[i][2] != AIPawn)
 			{
 				pawns[i][2] = AIPawn;
-				playerTurn = true;
-				break;
+				return;
 			}
-			else if (pawns[i][1] == AIPawn && pawns[i][2] == AIPawn && pawns[i][0] != playerPawn && !playerTurn)
+			else if (pawns[i][1] == AIPawn && pawns[i][2] == AIPawn && pawns[i][0] != playerPawn && pawns[i][0] != AIPawn)
 			{
 				pawns[i][0] = AIPawn;
-				playerTurn = true;
-				break;
+				return;
 			}
-			else if (pawns[i][0] == AIPawn && pawns[i][2] == AIPawn && pawns[i][1] != playerPawn && !playerTurn)
+			else if (pawns[i][0] == AIPawn && pawns[i][2] == AIPawn && pawns[i][1] != playerPawn && pawns[i][1] != AIPawn)
 			{
 				pawns[i][1] = AIPawn;
-				playerTurn = true;
-				break;
+				return;
 			}
-		}
-		
-		// Check for vertical two in a row condition for AI pawn
-		for (int i = 0; i < 3; i++)
-		{
-			if (pawns[0][i] == AIPawn && pawns[1][i] == AIPawn && pawns[2][i] != playerPawn && !playerTurn)
-			{
-				pawns[2][i] = AIPawn;
-				playerTurn = true;
-				break;
-			}
-			else if (pawns[1][i] == AIPawn && pawns[2][i] == AIPawn && pawns[0][i] != playerPawn && !playerTurn)
-			{
-				pawns[0][i] = AIPawn;
-				playerTurn = true;
-				break;
-			}
-			else if (pawns[0][i] == AIPawn && pawns[2][i] == AIPawn && pawns[1][i] != playerPawn && !playerTurn)
-			{
-				pawns[1][i] = AIPawn;
-				playerTurn = true;
-				break;
-			}
-		}
-		
-		// Check for two diagonals for AI pawn
-		if (pawns[0][0] == AIPawn && pawns[1][1] == AIPawn && pawns[2][2] != playerPawn && !playerTurn)
-		{
-			pawns[2][2] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[1][1] == AIPawn && pawns[2][2] == AIPawn && pawns[0][0] != playerPawn && !playerTurn)
-		{
-			pawns[0][0] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[0][0] == AIPawn && pawns[2][2] == AIPawn && pawns[1][1] != playerPawn && !playerTurn)
-		{
-			pawns[1][1] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[0][2] == AIPawn && pawns[1][1] == AIPawn && pawns[2][0] != playerPawn && !playerTurn)
-		{
-			pawns[2][0] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[2][0] == AIPawn && pawns[1][1] == AIPawn && pawns[0][2] != playerPawn && !playerTurn)
-		{
-			pawns[0][2] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[0][2] == AIPawn && pawns[2][0] == AIPawn && pawns[1][1] != playerPawn && !playerTurn)
-		{
-			pawns[1][1] = AIPawn;
-			playerTurn = true;
-		}
-		// Check for checkmate conditions ///////
-		// Horizontal two in a row checkmate
-		for (int i = 0; i < 3; i++)
-		{
-			if (pawns[i][0] == playerPawn && pawns[i][1] == playerPawn && pawns[i][2] != AIPawn && !playerTurn)
-			{
-				pawns[i][2] = AIPawn;
-				playerTurn = true;
-				break;
-			}
-			else if (pawns[i][1] == playerPawn && pawns[i][2] == playerPawn && pawns[i][0] != AIPawn && !playerTurn)
-			{
-				pawns[i][0] = AIPawn;
-				playerTurn = true;
-				break;
-			}
-			else if (pawns[i][0] == playerPawn && pawns[i][2] == playerPawn && pawns[i][1] != AIPawn && !playerTurn)
-			{
-				pawns[i][1] = AIPawn;
-				playerTurn = true;
-				break;
-			}
-		}
-		// Vertical two in a row checkmate
-		for (int i = 0; i < 3; i++)
-		{
-			if (pawns[0][i] == playerPawn && pawns[1][i] == playerPawn && pawns[2][i] != AIPawn && !playerTurn)
-			{
-				pawns[2][i] = AIPawn;
-				playerTurn = true;
-				break;
-			}
-			else if (pawns[1][i] == playerPawn && pawns[2][i] == playerPawn && pawns[0][i] != AIPawn && !playerTurn)
-			{
-				pawns[0][i] = AIPawn;
-				playerTurn = true;
-				break;
-			}
-			else if (pawns[0][i] == playerPawn && pawns[2][i] == playerPawn && pawns[1][i] != AIPawn && !playerTurn)
-			{
-				pawns[1][i] = AIPawn;
-				playerTurn = true;
-				break;
-			}
-		}
-		// Diagonal two in a row checkmate
-		if (pawns[0][0] == playerPawn && pawns[1][1] == playerPawn && pawns[2][2] != AIPawn && !playerTurn)
-		{
-			pawns[2][2] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[1][1] == playerPawn && pawns[2][2] == playerPawn && pawns[0][0] != AIPawn && !playerTurn)
-		{
-			pawns[0][0] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[0][0] == playerPawn && pawns[2][2] == playerPawn && pawns[1][1] != AIPawn && !playerTurn)
-		{
-			pawns[1][1] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[0][2] == playerPawn && pawns[1][1] == playerPawn && pawns[2][0] != AIPawn && !playerTurn)
-		{
-			pawns[2][0] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[2][0] == playerPawn && pawns[1][1] == playerPawn && pawns[0][2] != AIPawn && !playerTurn)
-		{
-			pawns[0][2] = AIPawn;
-			playerTurn = true;
-		}
-		else if (pawns[0][2] == playerPawn && pawns[2][0] == playerPawn && pawns[1][1] != AIPawn && !playerTurn)
-		{
-			pawns[1][1] = AIPawn;
-			playerTurn = true;
 		}
 
-		// Take center
-		if (pawns[1][1] == '5')
+		// Check for vertical two-in-a-row condition for AI or Player
+		for (int i = 0; i < 3; i++)
+		{
+			if (pawns[0][i] == AIPawn && pawns[1][i] == AIPawn && pawns[2][i] != playerPawn && pawns[2][i] != AIPawn)
+			{
+				pawns[2][i] = AIPawn;
+				return;
+			}
+			else if (pawns[1][i] == AIPawn && pawns[2][i] == AIPawn && pawns[0][i] != playerPawn && pawns[0][i] != AIPawn)
+			{
+				pawns[0][i] = AIPawn;
+				return;
+			}
+			else if (pawns[0][i] == AIPawn && pawns[2][i] == AIPawn && pawns[1][i] != playerPawn && pawns[1][i] != AIPawn)
+			{
+				pawns[1][i] = AIPawn;
+				return;
+			}
+		}
+
+		// Check diagonal two-in-a-row condition for AI or Player
+		if (pawns[0][0] == AIPawn && pawns[1][1] == AIPawn && pawns[2][2] != playerPawn && pawns[2][2] != AIPawn)
+		{
+			pawns[2][2] = AIPawn;
+			return;
+		}
+		else if (pawns[2][2] == AIPawn && pawns[1][1] == AIPawn && pawns[0][0] != playerPawn && pawns[0][0] != AIPawn)
+		{
+			pawns[0][0] = AIPawn;
+			return;
+		}
+		else if (pawns[0][2] == AIPawn && pawns[1][1] == AIPawn && pawns[2][0] != playerPawn && pawns[2][0] != AIPawn)
+		{
+			pawns[2][0] = AIPawn;
+			return;
+		}
+		else if (pawns[2][0] == AIPawn && pawns[1][1] == AIPawn && pawns[0][2] != playerPawn && pawns[0][2] != AIPawn)
+		{
+			pawns[0][2] = AIPawn;
+			return;
+		}
+
+		// Take center if available
+		if (pawns[1][1] != playerPawn && pawns[1][1] != AIPawn)
 		{
 			pawns[1][1] = AIPawn;
-			playerTurn = true;
+			return;
 		}
+
 		// Prioritize corners
-		else
+		int corners[4][2] = { {0, 0}, {0, 2}, {2, 0}, {2, 2} };
+		for (int i = 0; i < 4; i++)
 		{
-			int corners[4][2] = { {0, 0}, {0, 2}, {2, 0}, {2, 2} };
-			for (int i = 0; i < 4; i++)
+			int row = corners[i][0];
+			int col = corners[i][1];
+			if (pawns[row][col] != playerPawn && pawns[row][col] != AIPawn)
 			{
-				int row = corners[i][0];
-				int col = corners[i][1];
-				if (pawns[row][col] != playerPawn && pawns[row][col] != AIPawn)
-				{
-					pawns[row][col] = AIPawn;
-					playerTurn = true;
-					break;
-				}
+				pawns[row][col] = AIPawn;
+				return;
 			}
 		}
 
-		// If no corners are available, take an edge
-		if (!playerTurn)
+		// If no corners, take an edge
+		int edges[4][2] = { {0, 1}, {1, 0}, {1, 2}, {2, 1} };
+		for (int i = 0; i < 4; i++)
 		{
-			int edges[4][2] = { {0, 1}, {1, 0}, {1, 2}, {2, 1} };
-			for (int i = 0; i < 4; i++)
+			int row = edges[i][0];
+			int col = edges[i][1];
+			if (pawns[row][col] != playerPawn && pawns[row][col] != AIPawn)
 			{
-				int row = edges[i][0];
-				int col = edges[i][1];
-				if (pawns[row][col] != playerPawn && pawns[row][col] != AIPawn)
-				{
-					pawns[row][col] = AIPawn;
-					playerTurn = true;
-					break;
-				}
+				pawns[row][col] = AIPawn;
+				return;
 			}
 		}
 
-		// If no center, corners, or edges are available, choose a random spot
-		if (!playerTurn)
-		{
-			do
-			{
-				randNumber = rand() % 9 + 1;
-				for (int i = 0; i < 3; i++)
-				{
-					for (int j = 0; j < 3; j++)
-					{
-						if (pawns[i][j] == (char)randNumber && randNumber != 5)
-						{
-							pawns[i][j] = AIPawn;
-							playerTurn = true;
-							break;
-						}
-					}
-				}
-
-			} while (!playerTurn);
-		}
-	}
-	playerTurn = true;
-}
-
-void handlePlayerTurn(char pawns[3][3])
-{
-	if (playerTurn)
-	{
-		cout << "\nchoose a spot by pressing a number between 1-9\n";
-		displayBoard(pawns);
-		char number = 'n';
-		while (number != '0' && number != '1' && number != '2' && number != '3' && number != '4' && number != '5' && number != '6' && number != '7' && number != '8' && number != '9')
-		{
-			cin >> number;
-			if (number != '0' && number != '1' && number != '2' && number != '3' && number != '4' && number != '5' && number != '6' && number != '7' && number != '8' && number != '9')
-			{
-				cout << "Please input a number between 1-9\n";
-			}
-		}
-
+		// If no strategic moves left, place in a random available spot
+		std::vector<int> availableSpots;
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				if (pawns[i][j] == number)
+				if (pawns[i][j] != playerPawn && pawns[i][j] != AIPawn)
 				{
-					pawns[i][j] = playerPawn;
-					break;
+					// Convert board position (i,j) to a corresponding number 1-9
+					availableSpots.push_back(i * 3 + j + 1);
 				}
-
 			}
 		}
+
+		if (!availableSpots.empty())
+		{
+			// Randomly select one of the available spots
+			int randomIndex = rand() % availableSpots.size();
+			int chosenSpot = availableSpots[randomIndex];
+
+			// Convert the chosenSpot number back to board coordinates
+			int row = (chosenSpot - 1) / 3;
+			int col = (chosenSpot - 1) % 3;
+			pawns[row][col] = AIPawn;
+		}
 	}
-	playerTurn = false;
+	
+}
+
+void handlePlayerTurn(char pawns[3][3])
+{
+	
+	cout << "\nchoose a spot by pressing a number between 1-9\n";
+	displayBoard(pawns);
+	char number = 'n';
+	while (number != '0' && number != '1' && number != '2' && number != '3' && number != '4' && number != '5' && number != '6' && number != '7' && number != '8' && number != '9')
+	{
+		cin >> number;
+		if (number != '0' && number != '1' && number != '2' && number != '3' && number != '4' && number != '5' && number != '6' && number != '7' && number != '8' && number != '9')
+		{
+			cout << "Please input a number between 1-9\n";
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			if (pawns[i][j] == number)
+			{
+				pawns[i][j] = playerPawn;
+				totalTurns++;
+				break;
+			}
+		}
+	}	
 }

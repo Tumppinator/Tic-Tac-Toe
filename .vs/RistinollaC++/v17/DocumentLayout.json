@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\NonGithubC#_Projects\\RistinollaC\u002B\u002B\\Tic-Tac-Toe\\",
+  "WorkspaceRootPath": "D:\\GithubProjects_2\\RistinollaC\u002B\u002B\\Tic-Tac-Toe\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DF0FF8CD-2518-4FBE-BC6B-0568463387CD}|RistinollaC\u002B\u002B\\RistinollaC\u002B\u002B.vcxproj|D:\\NonGithubC#_Projects\\RistinollaC\u002B\u002B\\Tic-Tac-Toe\\RistinollaC\u002B\u002B\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{DF0FF8CD-2518-4FBE-BC6B-0568463387CD}|RistinollaC\u002B\u002B\\RistinollaC\u002B\u002B.vcxproj|D:\\GithubProjects_2\\RistinollaC\u002B\u002B\\Tic-Tac-Toe\\RistinollaC\u002B\u002B\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{DF0FF8CD-2518-4FBE-BC6B-0568463387CD}|RistinollaC\u002B\u002B\\RistinollaC\u002B\u002B.vcxproj|solutionrelative:RistinollaC\u002B\u002B\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -20,11 +20,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Main.cpp",
-              "DocumentMoniker": "D:\\NonGithubC#_Projects\\RistinollaC\u002B\u002B\\Tic-Tac-Toe\\RistinollaC\u002B\u002B\\Main.cpp",
+              "DocumentMoniker": "D:\\GithubProjects_2\\RistinollaC\u002B\u002B\\Tic-Tac-Toe\\RistinollaC\u002B\u002B\\Main.cpp",
               "RelativeDocumentMoniker": "RistinollaC\u002B\u002B\\Main.cpp",
-              "ToolTip": "D:\\NonGithubC#_Projects\\RistinollaC\u002B\u002B\\Tic-Tac-Toe\\RistinollaC\u002B\u002B\\Main.cpp",
+              "ToolTip": "D:\\GithubProjects_2\\RistinollaC\u002B\u002B\\Tic-Tac-Toe\\RistinollaC\u002B\u002B\\Main.cpp",
               "RelativeToolTip": "RistinollaC\u002B\u002B\\Main.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
+              "ViewState": "AQIAAB4BAAAAAAAAAAArwCQBAABxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-10-03T14:16:58.743Z",
               "EditorCaption": ""
